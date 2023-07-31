@@ -65,10 +65,12 @@ class TemperaturePublisher():
     def start_measure_temperature(self):
         db = DatabaseService()
         conn, cur = db.get_db()
+        GPIO.setup(5, GPIO.IN)
         while True:
             sht = SHT20(1, resolution=SHT20.TEMP_RES_14bit)
             humidity_in = sht.read_humid()
             temperature_in = sht.read_temp()
+            moisture = GPIO.input(5)
             sensors = W1ThermSensor.get_available_sensors()
             temperature_out = sensors[0].get_temperature()
             timestamp = int(time.time())
@@ -80,8 +82,9 @@ class TemperaturePublisher():
             self.mqtt_client.publish("greenhouse/temperature/in", temperature_in)
             self.mqtt_client.publish("greenhouse/humidity/in", humidity_in)
             self.mqtt_client.publish("greenhouse/temperature/out", temperature_out)
+            self.mqtt_client.publish("greenhouse/moisture/detected", moisture)
 
-            print("Temperature IN: {:.1f}°C, Humidity IN: {:.1f}%, Temperature OUT: {:.1f}°C".format(temperature_in, humidity_in, temperature_out))
+            print("Temperature IN: {:.1f}°C, Humidity IN: {:.1f}%, Moisture: {:1f}%, Temperature OUT: {:.1f}°C".format(temperature_in, humidity_in, moisture, temperature_out))
             time.sleep(10)
 
 class GPIOController():

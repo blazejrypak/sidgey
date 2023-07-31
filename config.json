@@ -1,0 +1,105 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "DB:7D:A3:24:AA:69",
+        "_username": "DA:7C:A6:27:A7:69",
+        "port": 51447,
+        "pin": "884-67-467",
+        "_pin": "813-65-465"
+    },
+    "platforms": [
+        {
+            "platform": "config",
+            "name": "Config",
+            "port": 8080,
+            "sudo": false
+        }
+    ],
+    "accessories": [
+        {
+            "accessory": "mqttthing",
+            "type": "irrigationSystem",
+            "name": "Irrigation",
+            "url": "localhost",
+            "topics": {
+                "getActive": "greenhouse/irrigation/switch/setOn",
+                "setActive": "greenhouse/irrigation/switch/setOn"
+            },
+            "durationTimer": true,
+            "integerValue": true
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "temperatureSensor",
+            "name": "Greenhouse Temperature IN",
+            "url": "localhost",
+            "topics": {
+                "getCurrentTemperature": "greenhouse/temperature/in"
+            },
+            "history": {
+                "size": 1000,
+                "autoRepeat": false,
+                "persistencePath": "history"
+            },
+            "logMqtt": true,
+            "maxTemperature": 60
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "temperatureSensor",
+            "name": "Greenhouse Temperature OUT",
+            "url": "localhost",
+            "topics": {
+                "getCurrentTemperature": "greenhouse/temperature/out"
+            },
+            "history": {
+                "size": 1000,
+                "autoRepeat": false,
+                "persistencePath": "history"
+            },
+            "logMqtt": true,
+            "maxTemperature": 60
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "humiditySensor",
+            "name": "Greenhouse Humidity IN",
+            "url": "localhost",
+            "topics": {
+                "getCurrentRelativeHumidity": "greenhouse/humidity/in"
+            },
+            "history": {
+                "size": 1000,
+                "autoRepeat": false,
+                "persistencePath": "history"
+            },
+            "logMqtt": true,
+            "maxHumidity": 100
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "switch",
+            "name": "Irrigation ON/OFF",
+            "url": "localhost",
+            "topics": {
+                "getOn": "greenhouse/irrigation/switch/setOn",
+                "setOn": "greenhouse/irrigation/switch/setOn"
+            },
+            "logMqtt": true,
+            "onValue": "0",
+            "offValue": "1"
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "leakSensor",
+            "name": "Moisture sensor",
+            "url": "localhost",
+            "logMqtt": true,
+            "topics": {
+                "getLeakDetected": "greenhouse/moisture/detected"
+            },
+            "onValue": 0,
+            "offValue": 1
+        }
+    ]
+}
